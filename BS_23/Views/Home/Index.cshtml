@@ -1,0 +1,47 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<BS_23.Models.ShowPost_VM>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+    @Html.TextBox("search")<input type="submit" value="Search Post"/>
+}
+<table class="table">
+    <thead>
+        <tr>
+        </tr>
+    </thead>
+    <tbody id="tb">
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => i.Post)
+
+                </td>
+                <td>@Html.DisplayFor(modelItem => i.Username)</td>
+                <td>@Html.DisplayFor(modelItem => i.PostDate)</td>
+                <td>@Html.DisplayFor(modelItem => i.ComentCount)</td>
+            </tr>
+
+            foreach (var s in i.CommentList)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => s.Coment)</td>
+                    <td>@Html.DisplayFor(modelItem => s.Username)</td>
+                    <td>@Html.DisplayFor(modelItem => s.CommentDate)</td>
+                    <td>@Html.DisplayFor(modelItem => s.like)</td>
+                    <td>@Html.DisplayFor(modelItem => s.dislike)</td>
+
+                </tr>
+                }
+            }
+
+
+    </tbody>
+</table>
+<div>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })
+
+</div>
